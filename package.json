@@ -1,0 +1,19 @@
+{
+  "name": "com.codegiraffe.nonstandard",
+  "version": "0.0.0",
+  "displayName": "NonStandard",
+  "description": "List of NonStandard libraries:\n\nhttps://github.com/mvaganov/NonStandardScripting.git\nhttps://github.com/mvaganov/NonStandardSystem.git\nhttps://github.com/mvaganov/NonStandardEventBind.git\nhttps://github.com/mvaganov/NonStandardInput.git\nhttps://github.com/mvaganov/NonStandardCharacter.git\nhttps://github.com/mvaganov/NonStandardDataSheet.git\nhttps://github.com/mvaganov/NonStandardParticles.git\nhttps://github.com/mvaganov/NonStandardMouseCursorIcons.git",
+  "unity": "2019.4",
+  "keywords": [
+    "library",
+    "utility",
+    "scripting",
+    "extensions",
+  ],
+  "author": {
+    "name": "Michael Vaganov",
+    "email": "mvaganov@hotmail.com",
+    "url": "http://www.codegiraffe.com"
+  },
+  "type": "library"
+}
