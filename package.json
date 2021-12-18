@@ -8,7 +8,7 @@
     "library",
     "utility",
     "scripting",
-    "extensions",
+    "extensions"
   ],
   "author": {
     "name": "Michael Vaganov",
