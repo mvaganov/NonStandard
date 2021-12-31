@@ -2,7 +2,7 @@
   "name": "com.codegiraffe.nonstandard",
   "version": "0.0.0",
   "displayName": "NonStandard",
-  "description": "List of NonStandard libraries:\n\n {0} https://github.com/mvaganov/NonStandardLines.git \n {1} https://github.com/mvaganov/NonStandardScripting.git \n {2} https://github.com/mvaganov/NonStandardEventBind.git \n {3:2} https://github.com/mvaganov/NonStandardInput.git \n {4:2,1} https://github.com/mvaganov/NonStandardSystem.git \n {5:4,3,2,1} https://github.com/mvaganov/NonStandardCharacter.git \n {6:4,2,1} https://github.com/mvaganov/NonStandardDataSheet.git \n {7:4,2,1} https://github.com/mvaganov/NonStandardParticles.git \n {8} https://github.com/mvaganov/NonStandardMouseCursorIcons.git",
+  "description": "List of NonStandard libraries: \n i:() Unity.InputSystem \n t:() Unity.TextMeshPro \n L:[] // https://github.com/mvaganov/NonStandardLines.git \n S:[] // https://github.com/mvaganov/NonStandardScripting.git \n E:[] // https://github.com/mvaganov/NonStandardEventBind.git \n U:[] // https://github.com/mvaganov/NonStandardUnityUtility.git \n m:[i,I,U] // https://github.com/mvaganov/NonStandardMouseCursorIcons.git \n I:[i,E,U] // https://github.com/mvaganov/NonStandardInput.git \n C:[i,I,E,U] // https://github.com/mvaganov/NonStandardCharacter.git \n Y:[t,i,E,U,I,S] // https://github.com/mvaganov/NonStandardSystem.git \n P:[t,i,U,E,S,Y] // https://github.com/mvaganov/NonStandardParticles.git \n D:[t,i,E,U,I,S,Y] // https://github.com/mvaganov/NonStandardDataSheet.git \n G:[i,E,U,I,C,S,Y] // https://github.com/mvaganov/NonStandardGameUi.git \n",
   "unity": "2019.4",
   "keywords": [
     "library",
