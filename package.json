@@ -1,6 +1,6 @@
 {
   "name": "com.codegiraffe.nonstandard",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "displayName": "NonStandard",
   "description": "List of NonStandard libraries: \n i:() Unity.InputSystem \n t:() Unity.TextMeshPro \n L:[] // https://github.com/mvaganov/NonStandardLines.git \n S:[] // https://github.com/mvaganov/NonStandardScripting.git \n U:[] // https://github.com/mvaganov/NonStandardUnityUtility.git \n m:[i,I,U] // https://github.com/mvaganov/NonStandardMouseCursorIcons.git \n I:[i,U] // https://github.com/mvaganov/NonStandardInput.git \n C:[i,I,U] // https://github.com/mvaganov/NonStandardCharacter.git \n Y:[t,i,U,I,S] // https://github.com/mvaganov/NonStandardSystem.git \n P:[t,i,U,S,Y] // https://github.com/mvaganov/NonStandardParticles.git \n D:[t,i,U,I,S,Y] // https://github.com/mvaganov/NonStandardDataSheet.git \n G:[i,U,I,C,S,Y] // https://github.com/mvaganov/NonStandardGameUi.git \n",
   "unity": "2019.4",
