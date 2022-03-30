@@ -1,5 +1,6 @@
+## NonStandardlibraries
 ```json
-NonStandardlibraries: {
+{
 	'i':{'req':[], 'id':"com.unity.inputsystem", 'v':"1.2.0", 'name':"Input System"},
 	't':{'req':[], 'id':"com.unity.textmeshpro", 'v':"3.0.6", 'name':"TextMeshPro"},
 	'L':{'req':[], 'id':"com.codegiraffe.nonstandard.lines", 'name':"NonStandard Lines", 'url':"https://github.com/mvaganov/NonStandardLines.git"},
