@@ -2,7 +2,7 @@
   "name": "com.codegiraffe.nonstandard",
   "version": "0.0.1",
   "displayName": "NonStandard",
-  "description": "See https://github.com/mvaganov/NonStandard/blob/master/README.md for more information, including listing of libraries with depenedency details.",
+  "description": "See https://github.com/mvaganov/NonStandard/blob/master/README.md for more information.",
   "unity": "2019.4",
   "keywords": [
     "library",
