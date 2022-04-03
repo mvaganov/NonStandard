@@ -1,0 +1,113 @@
+{
+"i":{
+	"listed":false,
+	"id":"com.unity.inputsystem",
+	"name":"Input System",
+	"v":"1.2.0"
+},
+"t":{
+	"listed":false,
+	"id":"com.unity.textmeshpro",
+	"name":"TextMeshPro",
+	"v":"3.0.6"
+},
+"L":{
+	"id":"com.codegiraffe.nonstandard.lines",
+	"name":"NonStandard Lines",
+	"url":"https://github.com/mvaganov/NonStandardLines.git",
+	"v":"0.1.0",
+	"desc":"* Lines.Make to create a Wire object.\n* Wire objects can be shaped by methods."
+},
+"S":{
+	"id":"com.codegiraffe.nonstandard.scripting",
+	"name":"NonStandard Scripting",
+	"url":"https://github.com/mvaganov/NonStandardScripting.git",
+	"v":"0.1.0",
+	"desc":"* Adds .Stringify() method to objects, which uses C# reflection to output a JSON-like representation.\n* Adds CodeConvert, which can TryParse JSON-like string representations into runtime C# objects."
+},
+"U":{
+	"id":"com.codegiraffe.nonstandard.unityutility",
+	"name":"NonStandard Unity Utilities",
+	"url":"https://github.com/mvaganov/NonStandardUnityUtility.git",
+	"v":"0.1.0",
+	"desc":"* Delayed: allows actions to execute on a timer, of frames or seconds\n* Follow: makes one transform follow another\n* LeavParent: automatically disconnect a transform from it's parent on start\n* NextScene: change the scene on DoActivateTrigger\n* OnActiveChange: execute functions when script is Enabled or Disabled"
+},
+"m":{
+	"req":["i","I","U"],
+	"id":"com.codegiraffe.nonstandard.mousecursoricons",
+	"name":"NonStandard MouseCursorIcons",
+	"url":"https://github.com/mvaganov/NonStandardMouseCursorIcons.git",
+	"v":"0.1.0",
+	"desc":""
+},
+"I":{
+	"req":["i","U"],
+	"id":"com.codegiraffe.nonstandard.input",
+	"name":"NonStandard Input",
+	"url":"https://github.com/mvaganov/NonStandardInput.git",
+	"v":"0.1.0",
+	"desc":""
+},
+"C":{
+	"req":["i","I","U"],
+	"id":"com.codegiraffe.nonstandard.character",
+	"name":"NonStandard Character",
+	"url":"https://github.com/mvaganov/NonStandardCharacter.git",
+	"v":"0.1.0",
+	"desc":""
+},
+"u":{
+	"req":["t","i","U","S"],
+	"id":"com.codegiraffe.nonstandard.ui",
+	"name":"NonStandard UI",
+	"url":"https://github.com/mvaganov/NonStandardUI.git",
+	"v":"0.1.0",
+	"desc":""
+},
+"Y":{
+	"req":["t","i","U","I","S"],
+	"id":"com.codegiraffe.nonstandard.system",
+	"name":"NonStandard System",
+	"url":"https://github.com/mvaganov/NonStandardSystem.git",
+	"v":"0.1.0",
+	"desc":"* Proc, which can Delay functions and lambda expressions in a reflective way. This works in a Unity context, and is able to work in a pure C# context as well\n* Show is an abstraction over logging, with callbacks that can filter strings to be logged.\n* Global is a utility class that is intended to refrence a global dictionary of manager classes.\n* EventBind is a Unity convenience class that exposes functions which can assign methods to UnityEvent<> lists.\n* PlatformAdjust has callbacks to execute when a scene loads on different platforms\n* ObjectPtr is a UnityEngine.Object reference that can navigate it's own internal structure as part of assignment in the UnityEditor.\n* BuildTime places the build time of the project in a Resources folder, for reflective access at runtime.\n* PerfWarnOnSelection write a warning if an object is selected in edit mode. This is useful to explain to users in Edit Mode why performance is lagging (because an actively updated object is selected).\n* On2DEditorView performs callbacks when the user switches to 2D mode in the editor view."
+},
+"P":{
+	"req":["t","i","U","S","Y"],
+	"id":"com.codegiraffe.nonstandard.particles",
+	"name":"NonStandard Particles",
+	"url":"https://github.com/mvaganov/NonStandardParticles.git",
+	"v":"0.1.0",
+	"desc":"Particle System related convenience methods"
+},
+"D":{
+	"req":["t","i","U","I","S","Y"],
+	"id":"com.codegiraffe.nonstandard.datasheet",
+	"name":"NonStandard DataSheet",
+	"url":"https://github.com/mvaganov/NonStandardDataSheet.git",
+	"v":"0.1.0",
+	"desc":"Work-in-progress library to turn any List of objects into a spreadsheet"
+},
+"G":{
+	"req":["i","U","I","C","S","Y"],
+	"id":"com.codegiraffe.nonstandard.gameui",
+	"name":"NonStandard Game UI",
+	"url":"https://github.com/mvaganov/NonStandardGameUi.git",
+	"v":"0.1.0",
+	"desc":""
+},
+"c":{
+	"req":["i","U","I","C","S","Y"],
+	"id":"com.codegiraffe.nonstandard.console",
+	"name":"NonStandard Console",
+	"url":"https://github.com/mvaganov/NonStandardCmd.git",
+	"v":"0.1.0",
+	"desc":"This is a real re-invention of the wheel so to speak, a command-line console in Unity"
+},
+"s":{
+	"req":["i","U","I","C","S","Y","c"],
+	"id":"com.codegiraffe.nonstandard.story",
+	"name":"NonStandard Story",
+	"url":"https://github.com/mvaganov/NonStandardStory.git", "v":"0.1.0",
+	"desc":""}
+}
