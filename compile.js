@@ -10,25 +10,49 @@ let extraLibGitignore = "";
 let gitstuff = "cd ..\n";
 let libgitignore = null;
 
-const updateGitignoreAndPackageFiles = new Promise((resolve0, reject0) => {
+DoThese([
+	prepareToAddToGitignore,
+	writePackageJsonFiles,
+	writeBatchfile,
+	writeGitignore,
+	function(callback) { console.log(_colorCyan("finished package metadata compile")); callback(null); }
+]);
+
+function DoThese(thingsToDo){
+	function DoThem(err) {
+		if (!err) {
+			if (thingsToDo.length == 0) { return; }
+			let nextThing = thingsToDo[0];
+			thingsToDo = thingsToDo.slice(1);
+			//console.log(`about to do thing ${thingsToDoIndex}: ${thingsToDo[thingsToDoIndex]}`);
+			nextThing(DoThem);
+		} else {
+			throw err;
+		}
+	}
+	DoThem();
+}
+
+function prepareToAddToGitignore(callback) {
 	fs.readFile(packageGitignore, 'utf8' , (err, data) => {
 		if (err) {
 			console.error(err);
-			resolve0();
+			callback();
 			return;
 		}
 		libgitignore = data.split('\n');
 		for(let i = 0; i < libgitignore.length; i++) {
 			libgitignore[i] = libgitignore[i].replace(/\r/g, "");
 		}
-		console.log(`found ${packageGitignore}`);
-		resolve0();
+		console.log(`${_colorCyan("found")} ${packageGitignore}`);
+		callback();
 	});
-}).then((resolve1,reject1) => {
-	GeneratePackages();
-});
-
-function GeneratePackages() {
+}
+function _colorCyan(str) { return `\x1b[36m${str}\x1b[0m`; }
+function _colorGreen(str) { return `\x1b[32m${str}\x1b[0m`; }
+function writePackageJsonFiles(callback) {
+	let written = 0, toWrite = 0;
+	let writtenFolders = [];
 	for (const [key, value] of Object.entries(listing)) {
 		if (value.listed === false) { continue; }
 		//console.log(`${key}: ${value}`);
@@ -42,24 +66,37 @@ function GeneratePackages() {
 			console.log(".gitignore does not contain "+extraIgnoreEntry);
 			extraLibGitignore += extraIgnoreEntry + "\n";
 		}
+		++toWrite;
+		writtenFolders.push(folderName);
 		fs.writeFile(packagePath, packageText, err => {
+			++written;
 			if (err) { console.error(err); return; }
-			console.log(`wrote ${packagePath}`);
+			if (written == toWrite){
+				console.log(`${_colorCyan("wrote packages")} ${writtenFolders.join(", ")}`);
+				callback();
+			}
 		});
 	}
+}
+function writeBatchfile(callback) {
 	fs.writeFile(gitstuffFilename, gitstuff, err => {
-		if (err) { console.error(err); return; }
-		console.log(`wrote ${gitstuffFilename}`);
+		if (err) { console.error(err); reject(err); return; }
+		console.log(`${_colorCyan("wrote")} ${gitstuffFilename}`);
+		callback();
 	});
+}
+function writeGitignore(callback) {
 	if (extraLibGitignore.length > 0) {
 		console.log(`adding .gitignore entries:\n${extraLibGitignore}`);
 		let finalAddendum = `# NonStandard library\n${extraLibGitignore}`;
 		fs.appendFile(packageGitignore, finalAddendum, function (err) {
-			if (err) throw err;
-			console.log(`updated ${packageGitignore}`);
+			if (err) { callback(err); throw err; }
+			console.log(`${_colorCyan("updated")} ${packageGitignore}`);
+			callback();
 		});
 	} else {
-		console.log(`${packageGitignore} already up to date`);
+		console.log(_colorGreen(`${packageGitignore} already up to date`));
+		callback();
 	}
 }
 
