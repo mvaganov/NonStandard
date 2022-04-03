@@ -1,4 +1,4 @@
-call git clone https://github.com/mvaganov/NonStandard.git
+cd ..
 call git clone https://github.com/mvaganov/NonStandardLines.git
 call git clone https://github.com/mvaganov/NonStandardScripting.git
 call git clone https://github.com/mvaganov/NonStandardUnityUtility.git
