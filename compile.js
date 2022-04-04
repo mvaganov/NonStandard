@@ -4,21 +4,29 @@ const fs = require('fs');
 
 let rawdata = fs.readFileSync('ls.json');
 let listing = JSON.parse(rawdata);
-const gitstuffFilename = "gitstuff.bat";
+let mapping = {};
+for (let i = 0; i < listing.length; i++) {
+	mapping[listing[i].packid] = listing[i];
+}
+let requestedPackages = ['*'];
+const gitimportFilename = "gitimport.bat";
 const packageGitignore = "../.gitignore";
+const nonstandardManifest = "../nonstandardmanifest.json";
 let extraLibGitignore = "";
-let gitstuff = "cd ..\n";
+let gitimport = "cd ..\n";
 let libgitignore = null;
 
 DoThese([
+	prepareNonStandardManifest,
 	prepareToAddToGitignore,
 	writePackageJsonFiles,
-	writeBatchfile,
+	determineWhichPackagesToImportFromGit,
+	writeGitimportBatchfile,
 	writeGitignore,
 	function(callback) { console.log(_colorCyan("finished package metadata compile")); callback(null); }
 ]);
 
-function DoThese(thingsToDo){
+function DoThese(thingsToDo) {
 	function DoThem(err) {
 		if (!err) {
 			if (thingsToDo.length == 0) { return; }
@@ -31,6 +39,44 @@ function DoThese(thingsToDo){
 		}
 	}
 	DoThem();
+}
+
+function prepareNonStandardManifest(callback) {
+	fs.readFile(nonstandardManifest, 'utf8' , (err, data) => {
+		if (err) {
+			requestAllPackages();
+			writeNonStandardManifest(callback);
+			return;
+		}
+		let packageManifest = JSON.parse(data);
+		requestedPackages = packageManifest.req;//data.split('\n');
+		console.log(`${_colorCyan("need packages: ")} ${requestedPackages.join(", ")}`);
+		callback();
+	});
+}
+
+function requestAllPackages() {
+	requestedPackages = [];
+	for (let i = 0; i < listing.length; ++i) {
+		let packid = listing[i].packid;
+		if (!packid) {
+			console.log(_colorRed(`missing package id for ${listing[i]}`));
+		}
+		requestedPackages.push(packid);
+	}
+}
+
+function writeNonStandardManifest(callback) {
+	let reqs = requestedPackages.length > 0 ? 
+		'\n\t\t"' + requestedPackages.join('",\n\t\t"') + '"\n\t' : "";
+	let nonstandardManifestText =
+`{
+	"req": [${reqs}]
+}`;
+	fs.writeFile(nonstandardManifest, nonstandardManifestText, err => {
+		if (err) { console.error(err); return; }
+		callback();
+	});
 }
 
 function prepareToAddToGitignore(callback) {
@@ -50,17 +96,19 @@ function prepareToAddToGitignore(callback) {
 }
 function _colorCyan(str) { return `\x1b[36m${str}\x1b[0m`; }
 function _colorGreen(str) { return `\x1b[32m${str}\x1b[0m`; }
+function _colorRed(str) { return `\x1b[31m${str}\x1b[0m`; }
 function writePackageJsonFiles(callback) {
 	let written = 0, toWrite = 0;
 	let writtenFolders = [];
-	for (const [key, value] of Object.entries(listing)) {
+	for (let i = 0; i < listing.length; ++i) {
+		let value = listing[i];
+		let key = value.packid;
 		if (value.listed === false) { continue; }
 		//console.log(`${key}: ${value}`);
-		let folderName = GetFolderName(value);
+		let folderName = getFolderName(value);
 		let packageFolder = `../${folderName}`
 		let packagePath = packageFolder + '/package.json';
-		let packageText = CreatePackageFileData(value,listing);
-		gitstuff += `call git clone ${value.url}\n`;
+		let packageText = CreatePackageFileData(value,mapping);
 		let extraIgnoreEntry = `${folderName}/`;
 		if (libgitignore == null || libgitignore.indexOf(extraIgnoreEntry) < 0) {
 			console.log(".gitignore does not contain "+extraIgnoreEntry);
@@ -78,13 +126,81 @@ function writePackageJsonFiles(callback) {
 		});
 	}
 }
-function writeBatchfile(callback) {
-	fs.writeFile(gitstuffFilename, gitstuff, err => {
+
+function determineWhichPackagesToImportFromGit(callback) {
+	function getDependencies(pack) {
+		let deps = [];
+		for (let j = 0; j < pack.req.length; ++j) {
+			let depId = pack.req[j];
+			let dep = mapping[depId];
+			if (!dep) {
+				console.log(`missing entry for dependency ${depId}`);
+				continue;
+			}
+			deps.push(depId);
+		}
+		return deps;
+	}
+	/// Returns true if this method needs to be run again, because it added to the list
+	function sortPackagesInsertingDependenciesFirst() {
+		// go through each expected package
+		for (let i = 0; i < requestedPackages.length; ++i) {
+			let packid = requestedPackages[i];
+			let pack = mapping[packid];
+			if (!pack) {
+				console.log(_colorRed(`missing package with id ${packid}`));
+				continue;
+			}
+			if (!pack.req) { continue; }
+			// get that package's dependencies.
+			let deps = getDependencies(pack);
+			// for each dependency
+			for (let j = 0; j < deps.length; ++j) {
+				// if the dependency is in the list
+				let dependencyIndex = requestedPackages.indexOf(deps[j]);
+				if (dependencyIndex >= 0) {
+					// if it's after this expected package in the requestedPackages listing
+					if (dependencyIndex >= i) {
+						// move it to before, and restart this whole process.
+						requestedPackages.splice(dependencyIndex, 1);
+						requestedPackages.splice(i, 0, deps[j]);
+						return true;
+					}
+				}
+				// if the dependency is not in the list
+				else {
+					// insert it to just before this package entry, and restart this whole process
+					requestedPackages.splice(i, 0, deps[j]);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	// filter out duplicates
+	requestedPackages = requestedPackages.filter((x, i) => i === requestedPackages.indexOf(x))
+	do{
+		//console.log(_colorCyan(requestedPackages.join(":")));
+	} while(sortPackagesInsertingDependenciesFirst());
+
+	for (let i = 0; i < requestedPackages.length; i++) {
+		let value = mapping[requestedPackages[i]];
+		if (value.url) {
+			gitimport += `call git clone ${value.url}\n`;
+		}
+	}
+	callback();
+}
+
+function writeGitimportBatchfile(callback) {
+	fs.writeFile(gitimportFilename, gitimport, err => {
 		if (err) { console.error(err); reject(err); return; }
-		console.log(`${_colorCyan("wrote")} ${gitstuffFilename}`);
+		console.log(`${_colorCyan("wrote")} ${gitimportFilename}`);
 		callback();
 	});
 }
+
 function writeGitignore(callback) {
 	if (extraLibGitignore.length > 0) {
 		console.log(`adding .gitignore entries:\n${extraLibGitignore}`);
@@ -103,14 +219,15 @@ function writeGitignore(callback) {
 // line escape converter, so strings can be passed into other string input
 function lnesc(text) { return text.replace(/\n/g, "\\n").replace(/\"/g, "\\\"").replace(/\'/g, "\\\'").replace(/\t/g, "\\t"); }
 
-function GetFolderName(packageData) { 
+function getFolderName(packageData) { 
+	if (!packageData || !packageData.url) { return null; }
 	let fullname = packageData.url;
 	let indexSlash = fullname.lastIndexOf("/");
 	let indexDot = fullname.lastIndexOf(".git");
 	return fullname.substring(indexSlash+1, indexDot);
 }
 
-function CreatePackageFileData(packageData, listing) {
+function CreatePackageFileData(packageData, mapping) {
 	const infoHeader = "NonStandard library imported using NonStandard package management";
 	let name = packageData.name;
 	let id = packageData.id;
@@ -118,7 +235,7 @@ function CreatePackageFileData(packageData, listing) {
 	let dependencies = [];
 	if (packageData.req) {
 		for (const [key,value] of Object.entries(packageData.req)) {
-			let dep = listing[value];
+			let dep = mapping[value];
 			if (!dep) {
 				console.log(`missing dependency '${value}'`);
 				continue;
