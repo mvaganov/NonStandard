@@ -49,6 +49,7 @@ let _doGenerateGitimportFiles = [
 
 var instructionsFromArgs = {
 	'all': _doAll,
+	'a': _doAll,
 	'package': _doPackageUpdate,
 	'p': _doPackageUpdate,
 	'import': _doGenerateGitimportFiles,
