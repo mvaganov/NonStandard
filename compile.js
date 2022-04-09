@@ -1,3 +1,4 @@
+// code by michael vaganov, released to the public domain via the unlicense (https://unlicense.org/)
 'use strict';
 const fs = require('fs');
 
