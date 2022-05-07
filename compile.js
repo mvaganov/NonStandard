@@ -15,15 +15,19 @@ const nonstandardManifest = "../nonstandardmanifest.json";
 
 /** 
 * handy dandy linear promise helper function.
-* @param {Function(error)[]} thingsToDoInOrder a list of things to do, in order
+* @param {function(callback)[]} thingsToDoInOrder functions with a single callback to do, in order
 */
 function DoThese(thingsToDoInOrder) {
 	function DoThem(err) {
 		if (err) { throw err; }
-		if (thingsToDoInOrder.length == 0) { return; }
-		let nextThingToDo = thingsToDoInOrder[0];
+		if (thingsToDoInOrder.length == 0) {
+			let caller = (new Error()).stack.split("\n")[2].trim();
+			console.log(_colorRed(`too many callbacks! Could be ${caller}`));
+			return;
+		}
+		let thingToDoNow = thingsToDoInOrder[0];
 		thingsToDoInOrder = thingsToDoInOrder.slice(1);
-		nextThingToDo(DoThem);
+		thingToDoNow(DoThem);
 	}
 	DoThem();
 }
